@@ -7,22 +7,29 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.PostConstruct;
+import java.net.URI;
 
 
 @Service
 public class IEXCloudApiClient {
     @Value("${iex.api_url}")
     private String apiUrl;
+    @Value("${iex.api_token}")
+    private String apiToken;
     @Autowired
     private IEXCloudApiCompany[] companies;
     @Autowired
     private RestTemplate restTemplate;
 
-    @PostConstruct
-    private void init(){
-        System.out.println(this.apiUrl);
-//
-//        System.out.println(this.apiUrl);
-//        this.restTemplate.getForObject(this.apiUrl,IEXCloudApiCompany.class);
+    public IEXCloudApiCompanyStock requestCompanyStockData(IEXCloudApiCompany company){
+        // TODO CANT FIND SIMPLE URL BUILDER
+        String requestUrl = apiUrl +
+                "/stable/stock/"+
+                company.symbol +
+                "/quote?token=" +
+                apiToken;
+        System.out.println(requestUrl);
+        return restTemplate.getForObject(requestUrl,
+                IEXCloudApiCompanyStock.class);
     }
 }

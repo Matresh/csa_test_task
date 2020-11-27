@@ -10,4 +10,5 @@ import lombok.*;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class IEXCloudApiCompany {
     String symbol;
+    boolean isEnabled;
 }

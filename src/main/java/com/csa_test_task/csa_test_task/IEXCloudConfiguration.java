@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
 
@@ -12,6 +13,7 @@ import java.util.Objects;
 import java.time.Duration;
 
 @Configuration
+@ComponentScan
 public class IEXCloudConfiguration {
 
     @Value("${iex.company_list_url}")
@@ -30,8 +32,10 @@ public class IEXCloudConfiguration {
     @Autowired
     @Bean
     public IEXCloudApiCompany[] companyArray(RestTemplate restTemplate){
-        return restTemplate.getForObject(this.company_list_url,
+        var a = restTemplate.getForObject(this.company_list_url,
                                             IEXCloudApiCompany[].class);
+//        System.out.println(Arrays.toString(a));
+        return a;
 //        return new IEXCloudApiCompany[]{IEXCloudApiCompany.builder().
 //                symbol("E").build()};
     }

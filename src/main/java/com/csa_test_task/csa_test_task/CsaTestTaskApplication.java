@@ -9,7 +9,11 @@ import java.util.Arrays;
 
 @SpringBootApplication
 public class CsaTestTaskApplication implements CommandLineRunner {
+	@Autowired
+	IEXCloudApiCompany[] companyArray;
 
+	@Autowired
+	IEXCloudApiClient IexCloudApiClient;
 
 	public static void main(String[] args) {
 		SpringApplication.run(CsaTestTaskApplication.class, args);
@@ -18,6 +22,12 @@ public class CsaTestTaskApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-//		System.out.println(Arrays.toString(this.companies));
+
+//		System.out.println(companyArray);
+		Arrays.stream(companyArray).
+				filter(company -> !company.isEnabled).
+				limit(5).
+				map(this.IexCloudApiClient::requestCompanyStockData).
+				forEach(System.out::println);
 	}
 }
