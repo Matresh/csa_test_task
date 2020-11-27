@@ -15,6 +15,9 @@ public class CsaTestTaskApplication implements CommandLineRunner {
 	@Autowired
 	IEXCloudApiClient IexCloudApiClient;
 
+	@Autowired
+	IEXCompanyStockRepository companyStockRepository;
+
 	public static void main(String[] args) {
 		SpringApplication.run(CsaTestTaskApplication.class, args);
 
@@ -28,6 +31,6 @@ public class CsaTestTaskApplication implements CommandLineRunner {
 				filter(company -> !company.isEnabled).
 				limit(5).
 				map(this.IexCloudApiClient::requestCompanyStockData).
-				forEach(System.out::println);
+				forEach(this.companyStockRepository::save);
 	}
 }
