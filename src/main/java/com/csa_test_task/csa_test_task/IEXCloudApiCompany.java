@@ -1,10 +1,13 @@
 package com.csa_test_task.csa_test_task;
 
-import lombok.Builder;
-import lombok.Value;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.*;
 
-@Value
-@Builder
+@Getter
+@Setter
+@ToString
+@NoArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class IEXCloudApiCompany {
     String symbol;
 }

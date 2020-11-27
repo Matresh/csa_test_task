@@ -32,7 +32,8 @@ public class IEXCloudConfiguration {
     public IEXCloudApiCompany[] companyArray(RestTemplate restTemplate){
         return restTemplate.getForObject(this.company_list_url,
                                             IEXCloudApiCompany[].class);
-
+//        return new IEXCloudApiCompany[]{IEXCloudApiCompany.builder().
+//                symbol("E").build()};
     }
 
 }
