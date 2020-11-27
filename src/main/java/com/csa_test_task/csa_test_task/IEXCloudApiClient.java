@@ -11,14 +11,18 @@ import javax.annotation.PostConstruct;
 
 @Service
 public class IEXCloudApiClient {
-    @Value("${iex.api_url")
+    @Value("${iex.api_url}")
     private String apiUrl;
-
+    @Autowired
+    private IEXCloudApiCompany[] companies;
     @Autowired
     private RestTemplate restTemplate;
 
     @PostConstruct
     private void init(){
-        this.restTemplate.getForObject(this.apiUrl,IEXCloudApiCompany.class);
+        System.out.println(this.apiUrl);
+//
+//        System.out.println(this.apiUrl);
+//        this.restTemplate.getForObject(this.apiUrl,IEXCloudApiCompany.class);
     }
 }
