@@ -2,12 +2,8 @@ package com.csa_test_task.csa_test_task;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-
-import javax.annotation.PostConstruct;
-import java.net.URI;
 
 
 @Service
@@ -23,7 +19,8 @@ public class IEXCloudApiClient {
 
     public IEXCloudApiCompanyStock requestCompanyStockData(IEXCloudApiCompany company){
         // TODO CANT FIND SIMPLE URL BUILDER
-        String requestUrl = apiUrl +
+        String requestUrl =
+                apiUrl +
                 "/stable/stock/"+
                 company.symbol +
                 "/quote?token=" +
