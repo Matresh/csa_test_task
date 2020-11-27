@@ -7,6 +7,8 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 
 @Getter
 @Setter
@@ -15,6 +17,7 @@ import javax.persistence.Entity;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Entity
 public class IEXCloudApiCompanyStock {
+    private @Id @GeneratedValue Long id;
     String symbol;
     String companyName;
     double changePercent;
