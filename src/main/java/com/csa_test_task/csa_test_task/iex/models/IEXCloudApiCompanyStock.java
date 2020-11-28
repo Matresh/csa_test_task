@@ -6,9 +6,10 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 @Getter
 @Setter
@@ -18,8 +19,15 @@ import javax.persistence.Id;
 @Entity
 public class IEXCloudApiCompanyStock {
     private @Id @GeneratedValue Long id;
-    public String symbol;
-    public String companyName;
-    public double changePercent;
-    public double high;
+    String symbol;
+    String companyName;
+    double changePercent;
+    double high;
+
+    @ToString.Exclude
+    @OneToMany(mappedBy = "companyStock",
+            orphanRemoval = true,
+            fetch = FetchType.LAZY)
+    Collection<IEXCompanyStockHistory> historyRecords = new ArrayList<IEXCompanyStockHistory>();
+
 }

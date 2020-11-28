@@ -18,8 +18,8 @@ public class StockHistoryController {
     private void onPresent(IEXCloudApiCompanyStock stock, IEXCloudApiCompanyStock actual_stock){
         if (!actual_stock.equals(stock)){
             historyRepository.save(IEXCompanyStockHistory.builder().
-                    newStock(stock).
-                    oldStock(actual_stock).
+                    newStock(stock.toString()).
+                    oldStock(actual_stock.toString()).
                     companyStock(actual_stock).build());
         }
 
@@ -30,7 +30,8 @@ public class StockHistoryController {
     }
 
     void saveWithChangeHistory(IEXCloudApiCompanyStock stock){
-        stockRepository.findById(stock.getId()).
+        System.out.println("112233332323232323232323");
+        stockRepository.findBySymbol(stock.getSymbol()).
                 ifPresentOrElse(
                         (actual_stock) -> this.onPresent(stock, actual_stock),
                         ()-> this.onAbsent(stock));

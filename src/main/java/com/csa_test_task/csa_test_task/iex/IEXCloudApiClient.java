@@ -24,7 +24,7 @@ public class IEXCloudApiClient {
         String requestUrl =
                 apiUrl +
                 "/stable/stock/"+
-                company.symbol +
+                company.getSymbol() +
                 "/quote?token=" +
                 apiToken;
         System.out.println(requestUrl);

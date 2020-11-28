@@ -30,11 +30,10 @@ public class CsaTestTaskApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 
-//		System.out.println(companyArray);
+//		System.out.println(Arrays.toString(companyArray));
 
 		Arrays.stream(companyArray).
-				filter(company -> !company.isEnabled).
-//TODO REMOVE LIMIT ON HAVE NOT MOBILE NETWORK
+				filter(company -> !company.isEnabled()).
 				limit(5).
 				map(this.IexCloudApiClient::requestCompanyStockData).
 				forEach(this.historyController::saveWithChangeHistory);
