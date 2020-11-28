@@ -19,6 +19,8 @@ import java.util.List;
 @Entity
 public class IEXCloudApiCompanyStock {
     private @Id @GeneratedValue Long id;
+
+    @Column(unique = true)
     String symbol;
     String companyName;
     double changePercent;

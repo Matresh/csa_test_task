@@ -28,7 +28,7 @@ public class StockHistoryController {
                     oldStock(actual_stock.toString()).
                     companyStock(actual_stock).build());
         }
-
+        stock.setId(actual_stock.getId());
         stockRepository.save(stock);
     }
     private void onAbsent(IEXCloudApiCompanyStock stock){
