@@ -1,4 +1,4 @@
-package com.csa_test_task.csa_test_task;
+package com.csa_test_task.csa_test_task.iex.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
@@ -18,8 +18,8 @@ import javax.persistence.Id;
 @Entity
 public class IEXCloudApiCompanyStock {
     private @Id @GeneratedValue Long id;
-    String symbol;
-    String companyName;
-    double changePercent;
-    double high;
+    public String symbol;
+    public String companyName;
+    public double changePercent;
+    public double high;
 }

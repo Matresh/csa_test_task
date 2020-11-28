@@ -1,5 +1,9 @@
 package com.csa_test_task.csa_test_task;
 
+import com.csa_test_task.csa_test_task.iex.IEXCompanyStockHistoryRepository;
+import com.csa_test_task.csa_test_task.iex.IEXCompanyStockRepository;
+import com.csa_test_task.csa_test_task.iex.models.IEXCloudApiCompanyStock;
+import com.csa_test_task.csa_test_task.iex.models.IEXCompanyStockHistory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

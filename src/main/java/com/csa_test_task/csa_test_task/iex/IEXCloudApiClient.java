@@ -1,5 +1,7 @@
-package com.csa_test_task.csa_test_task;
+package com.csa_test_task.csa_test_task.iex;
 
+import com.csa_test_task.csa_test_task.iex.models.IEXCloudApiCompany;
+import com.csa_test_task.csa_test_task.iex.models.IEXCloudApiCompanyStock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;

@@ -1,5 +1,7 @@
 package com.csa_test_task.csa_test_task;
 
+import com.csa_test_task.csa_test_task.iex.IEXCloudApiClient;
+import com.csa_test_task.csa_test_task.iex.models.IEXCloudApiCompany;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;

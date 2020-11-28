@@ -1,5 +1,6 @@
-package com.csa_test_task.csa_test_task;
+package com.csa_test_task.csa_test_task.iex.models;
 
+import com.csa_test_task.csa_test_task.iex.models.IEXCloudApiCompanyStock;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;

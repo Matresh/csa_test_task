@@ -1,5 +1,6 @@
-package com.csa_test_task.csa_test_task;
+package com.csa_test_task.csa_test_task.iex;
 
+import com.csa_test_task.csa_test_task.iex.models.IEXCloudApiCompany;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -8,8 +9,6 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Arrays;
-import java.util.Objects;
 import java.time.Duration;
 
 @Configuration
@@ -32,12 +31,8 @@ public class IEXCloudConfiguration {
     @Autowired
     @Bean
     public IEXCloudApiCompany[] companyArray(RestTemplate restTemplate){
-        var a = restTemplate.getForObject(this.company_list_url,
+        return restTemplate.getForObject(this.company_list_url,
                                             IEXCloudApiCompany[].class);
-//        System.out.println(Arrays.toString(a));
-        return a;
-//        return new IEXCloudApiCompany[]{IEXCloudApiCompany.builder().
-//                symbol("E").build()};
     }
 
 }
