@@ -4,10 +4,12 @@ import com.csa_test_task.csa_test_task.iex.IEXCompanyStockHistoryRepository;
 import com.csa_test_task.csa_test_task.iex.IEXCompanyStockRepository;
 import com.csa_test_task.csa_test_task.iex.models.IEXCloudApiCompanyStock;
 import com.csa_test_task.csa_test_task.iex.models.IEXCompanyStockHistory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
+@Slf4j
 public class StockHistoryController {
 
     @Autowired
@@ -16,7 +18,11 @@ public class StockHistoryController {
     @Autowired
     IEXCompanyStockRepository stockRepository;
     private void onPresent(IEXCloudApiCompanyStock stock, IEXCloudApiCompanyStock actual_stock){
+
         if (!actual_stock.equals(stock)){
+
+            log.info(actual_stock.toString()+" is changed to" + stock.toString());
+
             historyRepository.save(IEXCompanyStockHistory.builder().
                     newStock(stock.toString()).
                     oldStock(actual_stock.toString()).
@@ -30,7 +36,6 @@ public class StockHistoryController {
     }
 
     void saveWithChangeHistory(IEXCloudApiCompanyStock stock){
-        System.out.println("112233332323232323232323");
         stockRepository.findBySymbol(stock.getSymbol()).
                 ifPresentOrElse(
                         (actual_stock) -> this.onPresent(stock, actual_stock),

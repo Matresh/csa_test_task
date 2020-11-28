@@ -2,6 +2,7 @@ package com.csa_test_task.csa_test_task;
 
 import com.csa_test_task.csa_test_task.iex.IEXCompanyStockRepository;
 import com.csa_test_task.csa_test_task.iex.models.IEXCloudApiCompanyStock;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -9,9 +10,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 
 @Component
+@Slf4j
 public class StockStatisticsScheduled {
     @Autowired
     IEXCompanyStockRepository stockRepository;
@@ -24,8 +25,18 @@ public class StockStatisticsScheduled {
                 Sort.by(Sort.Direction.DESC,
                         "high"));
 
-        stockRepository.findAll(topFive).
-                forEach(System.out::println);
+        Page<IEXCloudApiCompanyStock> stocks = stockRepository.findAll(topFive);
+
+        log.info("-".repeat(40)+"topFiveExpensiveStocks"+"-".repeat(40));
+
+        if (stocks.isEmpty()){
+            log.info("Empty");
+        }
+        else{
+            stocks.forEach(
+                    (companyStock) ->
+                            log.info(companyStock.toString()));
+        }
 
     }
 
@@ -39,11 +50,15 @@ public class StockStatisticsScheduled {
 
         Page<IEXCloudApiCompanyStock> stocks = stockRepository.findAll(lastFive);
 
+        log.info("-".repeat(40)+"lastFiveExpensiveStocks"+"-".repeat(40));
+
         if (stocks.isEmpty()){
-            System.out.println("Empty");
+            log.info("Empty");
         }
         else{
-            stocks.forEach(System.out::println);
+            stocks.forEach(
+                    (companyStock) ->
+                            log.info(companyStock.toString()));
         }
     }
 }
