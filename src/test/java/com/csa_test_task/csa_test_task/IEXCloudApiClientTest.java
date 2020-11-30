@@ -16,11 +16,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-
-
-import java.nio.file.Files;
-import java.nio.file.Paths;
-
+import static org.junit.jupiter.api.Assertions.assertEquals;
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = IEXCloudTestConfiguration.class)
 @TestPropertySource(locations = "/application.properties")
@@ -40,14 +36,13 @@ public class IEXCloudApiClientTest extends IEXCloudApiTests {
     void requestCompanyStockDataTestRequestPerformed() throws Exception {
         IEXCloudApiCompany company = getRandomCompany();
         IEXCloudApiCompanyStock stock = getRandomStock();
+
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode node = mapper.valueToTree(stock);
         String requestUrl ="/stable/stock/"+
                             company.getSymbol() +
                             "/quote?token=" +
                             apiToken;
-
-
-        ObjectMapper mapper = new ObjectMapper();
-        JsonNode node = mapper.valueToTree(stock);
 
         wireMockServer.stubFor(
         get(WireMock.urlEqualTo(requestUrl))
@@ -57,9 +52,14 @@ public class IEXCloudApiClientTest extends IEXCloudApiTests {
 
         IEXCloudApiCompanyStock actual_stock = apiClient.requestCompanyStockData(company);
 
+        assertEquals(stock.getId(), actual_stock.getId());
+        assertEquals(stock.getChangePercent(), actual_stock.getChangePercent());
+        assertEquals(stock.getCompanyName(), actual_stock.getCompanyName());
+        assertEquals(stock.getSymbol(), actual_stock.getSymbol());
+        assertEquals(stock.getHigh(), actual_stock.getHigh());
+
+        wireMockServer.verify(getRequestedFor(urlEqualTo(requestUrl)));
+
     }
 
-    public static String readFileAsString(String file) throws Exception{
-        return new String(Files.readAllBytes(Paths.get(file)));
-    }
 }

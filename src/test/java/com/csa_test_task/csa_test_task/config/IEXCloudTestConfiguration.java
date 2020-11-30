@@ -12,7 +12,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.time.Duration;
 
-@Configuration
+@TestConfiguration
 @ComponentScan("com.csa_test_task.csa_test_task")
 public class IEXCloudTestConfiguration {
 

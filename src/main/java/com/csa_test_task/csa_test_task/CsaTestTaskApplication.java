@@ -60,7 +60,7 @@ public class CsaTestTaskApplication implements CommandLineRunner {
 
 			Stream<Future<IEXCloudApiCompanyStock>> stockFutureStream = companyStream
 					.sequential()
-					.map(this::AsyncRequestIEXCloudApiCompanyStock);
+					.map(this::asyncRequestIEXCloudApiCompanyStock);
 
 			stockFutureStream.
 					parallel()
@@ -71,7 +71,7 @@ public class CsaTestTaskApplication implements CommandLineRunner {
 		}
 	}
 
-	private Future<IEXCloudApiCompanyStock> AsyncRequestIEXCloudApiCompanyStock(IEXCloudApiCompany company){
+	private Future<IEXCloudApiCompanyStock> asyncRequestIEXCloudApiCompanyStock(IEXCloudApiCompany company){
 		return CompletableFuture.supplyAsync(
 				() -> this.iexCloudApiClient.requestCompanyStockData(company),
 				threadPool);
