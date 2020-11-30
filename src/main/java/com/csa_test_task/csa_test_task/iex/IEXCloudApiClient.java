@@ -16,8 +16,7 @@ public class IEXCloudApiClient {
     private String apiUrl;
     @Value("${iex.api_token}")
     private String apiToken;
-    @Autowired
-    private IEXCloudApiCompany[] companies;
+
     @Autowired
     private RestTemplate restTemplate;
 

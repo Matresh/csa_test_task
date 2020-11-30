@@ -1,10 +1,7 @@
 package com.csa_test_task.csa_test_task.iex.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -17,6 +14,8 @@ import java.util.List;
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Entity
+@AllArgsConstructor
+@Builder
 public class IEXCloudApiCompanyStock {
     private @Id @GeneratedValue Long id;
 

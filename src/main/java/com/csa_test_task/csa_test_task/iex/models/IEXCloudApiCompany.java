@@ -6,7 +6,9 @@ import lombok.*;
 @Getter
 @Setter
 @ToString
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class IEXCloudApiCompany {
     String symbol;
