@@ -14,48 +14,46 @@ import org.springframework.stereotype.Component;
 @Component
 @Slf4j
 public class StockStatisticsScheduled {
+
+    private final IEXCompanyStockRepository stockRepository;
+
     @Autowired
-    IEXCompanyStockRepository stockRepository;
+    public StockStatisticsScheduled(IEXCompanyStockRepository stockRepository) {
+        this.stockRepository = stockRepository;
+    }
 
     @Scheduled(cron = "*/5 * * * * *")
     public void topFiveExpensiveStocks(){
         PageRequest topFive = PageRequest.of(
                 0,
                 5,
-                Sort.by(Sort.Direction.DESC,
-                        "high"));
+                Sort.by(Sort.Direction.DESC,"high"));
 
         Page<IEXCloudApiCompanyStock> stocks = stockRepository.findAll(topFive);
 
-        log.info("-".repeat(40)+"topFiveExpensiveStocks"+"-".repeat(40));
-
-        if (stocks.isEmpty()){
-            log.info("Empty");
-        }
-        else{
-            stocks.forEach(
-                    (companyStock) ->
-                            log.info(companyStock.toString()));
-        }
+        StocksStatsOutput(stocks, "topFiveExpensiveStocks");
 
     }
+
 
     @Scheduled(cron = "*/5 * * * * *")
     public void lastFiveExpensiveStocks(){
         PageRequest lastFive = PageRequest.of(
                 0,
                 5,
-                Sort.by(Sort.Direction.ASC,
-                        "changePercent"));
+                Sort.by(Sort.Direction.ASC,"changePercent"));
 
         Page<IEXCloudApiCompanyStock> stocks = stockRepository.findAll(lastFive);
 
-        log.info("-".repeat(40)+"lastFiveExpensiveStocks"+"-".repeat(40));
+        StocksStatsOutput(stocks, "lastFiveExpensiveStocks");
+    }
 
-        if (stocks.isEmpty()){
+    private void StocksStatsOutput(Page<IEXCloudApiCompanyStock> stocks, String outputName) {
+        log.info("-".repeat(40) + outputName + "-".repeat(40));
+
+        if (stocks.isEmpty()) {
             log.info("Empty");
-        }
-        else{
+        } else {
             stocks.forEach(
                     (companyStock) ->
                             log.info(companyStock.toString()));

@@ -12,11 +12,17 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class StockHistoryController {
 
-    @Autowired
-    IEXCompanyStockHistoryRepository historyRepository;
+
+    private final IEXCompanyStockHistoryRepository historyRepository;
 
     @Autowired
     IEXCompanyStockRepository stockRepository;
+
+    @Autowired
+    public StockHistoryController(IEXCompanyStockHistoryRepository historyRepository) {
+        this.historyRepository = historyRepository;
+    }
+
     private void onPresent(IEXCloudApiCompanyStock stock, IEXCloudApiCompanyStock actual_stock){
 
         if (!actual_stock.equals(stock)){
@@ -32,6 +38,7 @@ public class StockHistoryController {
         stockRepository.save(stock);
     }
     private void onAbsent(IEXCloudApiCompanyStock stock){
+        log.info(stock.toString()+" is appears first time");
         stockRepository.save(stock);
     }
 

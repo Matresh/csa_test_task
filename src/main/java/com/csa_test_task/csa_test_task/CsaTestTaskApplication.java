@@ -10,27 +10,36 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.*;
 import java.util.stream.Stream;
 
 @SpringBootApplication
 @EnableScheduling
 public class CsaTestTaskApplication implements CommandLineRunner {
-	@Value("${app.mobile_data}")
-	boolean mobileData;
+
+	private final boolean mobileData;
+
+	private final IEXCloudApiCompany[] companyArray;
+
+	private final IEXCloudApiClient iexCloudApiClient;
+
+	private final StockHistoryController historyController;
+
+	ExecutorService threadPool;
 
 	@Autowired
-	IEXCloudApiCompany[] companyArray;
-
-	@Autowired
-	IEXCloudApiClient IexCloudApiClient;
-
-	@Autowired
-	StockHistoryController historyController;
+	public CsaTestTaskApplication(@Value("${app.mobile_data}")boolean mobileData,
+								  IEXCloudApiCompany[] companyArray,
+								  IEXCloudApiClient iexCloudApiClient,
+								  StockHistoryController historyController) {
+		this.mobileData = mobileData;
+		this.companyArray = companyArray;
+		this.iexCloudApiClient = iexCloudApiClient;
+		this.historyController = historyController;
+		this.threadPool = Executors.newFixedThreadPool(2);
+	}
 
 	public static void main(String[] args) {
 		SpringApplication.run(CsaTestTaskApplication.class, args);
@@ -38,39 +47,42 @@ public class CsaTestTaskApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		ExecutorService threadPool = Executors.newFixedThreadPool(2);
+
 
 		while (true) {
-			Stream<IEXCloudApiCompany> company_stream = Arrays.stream(companyArray).
-					parallel().
-					unordered().
-					filter(company -> !company.isEnabled());
+			Stream<IEXCloudApiCompany> companyStream = Arrays.stream(companyArray)
+					.parallel()
+					.filter(company -> !company.isEnabled());
 
 			if (mobileData){
-				company_stream = company_stream.limit(5);
+				companyStream = companyStream.limit(5);
 			}
-			Stream<Future<IEXCloudApiCompanyStock>> stock_future_stream = company_stream.
-					sequential().
-					map(
-							(company) ->
-									CompletableFuture.supplyAsync(
-											() -> this.IexCloudApiClient.requestCompanyStockData(company),
-											threadPool));
 
-			stock_future_stream.
-					parallel().
-					map(
-							(stock_future) -> {
-								try {
-									return stock_future.get();
-								} catch (InterruptedException | ExecutionException e) {
-									e.printStackTrace();
-								}
-								return null;
-							}
-					).
-					filter(Objects::nonNull).
-					forEach(this.historyController::saveWithChangeHistory);
+			Stream<Future<IEXCloudApiCompanyStock>> stockFutureStream = companyStream
+					.sequential()
+					.map(this::AsyncRequestIEXCloudApiCompanyStock);
+
+			stockFutureStream.
+					parallel()
+					.map(this::getIEXCloudApiCompanyStock)
+					.filter(Optional::isPresent)
+					.map(Optional::get)
+					.forEach(this.historyController::saveWithChangeHistory);
 		}
+	}
+
+	private Future<IEXCloudApiCompanyStock> AsyncRequestIEXCloudApiCompanyStock(IEXCloudApiCompany company){
+		return CompletableFuture.supplyAsync(
+				() -> this.iexCloudApiClient.requestCompanyStockData(company),
+				threadPool);
+	}
+	private Optional<IEXCloudApiCompanyStock> getIEXCloudApiCompanyStock(Future<IEXCloudApiCompanyStock> future){
+		try {
+			return Optional.of(future.get());
+		} catch (InterruptedException | ExecutionException e) {
+			e.printStackTrace();
+		}
+		return Optional.empty();
+
 	}
 }
